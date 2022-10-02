@@ -24,5 +24,9 @@ namespace SportPal.Models
         [Required]
         [MaxLength(25)]
         public string? Organizer { get; set; }
+
+       
+        public List<Standings>? Standings { get; set; }
+        
     }
 }

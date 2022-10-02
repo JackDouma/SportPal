@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SportPal.Models.League>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sport)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Organizer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sport)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Organizer)
+            </td>
+            <td>
+                <a asp-action="Standings/@item.LeagueId" asp-route-id="@item.LeagueId">View</a> |
+                <a asp-action="Edit" asp-route-id="@item.LeagueId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.LeagueId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

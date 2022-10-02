@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
+using SportPal.Models;
 
 namespace SportPal.Data
 {
@@ -9,7 +10,9 @@ namespace SportPal.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            PublicKey DbSet<SportPal.models.>
         }
+
+        public DbSet<SportPal.Models.League> League { get; set; }
+        public DbSet<Standings> Standings { get; set; }
     }
 }
