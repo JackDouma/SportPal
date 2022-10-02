@@ -39,7 +39,7 @@ namespace SportPal.Models
         // forgien key
         public int LeagueId { get; set; }
 
-        
+        // parent ref
         public League? League { get; set; }
     }
 }

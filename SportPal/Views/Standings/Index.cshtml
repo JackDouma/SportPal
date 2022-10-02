@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<SportPal.Models.Standings>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Standings";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["LeagueName"] Standings</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Team)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coach)
+                Points
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Wins)
@@ -27,39 +27,40 @@
             <th>
                 @Html.DisplayNameFor(model => model.Ties)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.League)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Team)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Coach)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Losses)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ties)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.League)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StandingsId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.StandingsId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.StandingsId">Delete</a>
-            </td>
-        </tr>
+   // if (item.League.Name == @ViewData["LeagueName"])
+   // {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Team)
+                    </td>
+                    <td>
+                        @{
+                            var points = (item.Wins * 2) + (item.Ties);                
+                        }
+                        @points
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wins)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Losses)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ties)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.StandingsId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.StandingsId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.StandingsId">Delete</a>
+                    </td>
+                </tr>
+   // }
 }
     </tbody>
 </table>

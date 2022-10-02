@@ -25,7 +25,7 @@ namespace SportPal.Models
         [MaxLength(25)]
         public string? Organizer { get; set; }
 
-       
+       // child ref
         public List<Standings>? Standings { get; set; }
         
     }

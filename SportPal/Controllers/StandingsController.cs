@@ -20,9 +20,16 @@ namespace SportPal.Controllers
         }
 
         // GET: Standings
-        public async Task<IActionResult> Index()
+        // param called LeageName is required, or else user will be redirect to error page
+        public async Task<IActionResult> Index(string LeagueName)
         {
+            if (LeagueName == null)
+            {
+                return RedirectToAction("Error");
+            }
+            // LeagueId is incorrect, but League is giving errors right now
             var applicationDbContext = _context.League.Include(l => l.LeagueId);
+            ViewData["LeagueName"] = LeagueName;
             return View(await _context.Standings.ToListAsync());
         }
 

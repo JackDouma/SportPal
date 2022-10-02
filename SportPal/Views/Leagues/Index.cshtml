@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Organizer)
             </td>
             <td>
-                <a asp-action="Standings/@item.LeagueId" asp-route-id="@item.LeagueId">View</a> |
+                <a asp-controller="Standings" asp-action="Index" asp-route-LeagueName="@item.Name">View</a> |
                 <a asp-action="Edit" asp-route-id="@item.LeagueId">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.LeagueId">Delete</a>
             </td>
