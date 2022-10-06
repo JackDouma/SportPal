@@ -4,7 +4,7 @@
     ViewData["Title"] = "Standings";
 }
 
-<h1>@ViewData["LeagueName"] Standings</h1>
+<h1>Standings</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -31,36 +31,36 @@
         </tr>
     </thead>
     <tbody>
-
-@foreach (var item in Model) {
-   // if (item.League.Name == @ViewData["LeagueName"])
-   // {
+@foreach (var team in Model) 
+{
+    if (team.LeagueId == (int)@ViewData["LeagueId"])
+    {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Team)
+                        @Html.DisplayFor(modelItem => team.Team)
                     </td>
                     <td>
                         @{
-                            var points = (item.Wins * 2) + (item.Ties);                
+                            var points = (team.Wins * 2) + (team.Ties);
                         }
                         @points
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Wins)
+                        @Html.DisplayFor(modelItem => team.Wins)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Losses)
+                        @Html.DisplayFor(modelItem => team.Losses)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Ties)
+                        @Html.DisplayFor(modelItem => team.Ties)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.StandingsId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.StandingsId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.StandingsId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@team.StandingsId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@team.StandingsId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@team.StandingsId">Delete</a>
                     </td>
                 </tr>
-   // }
+    }
 }
     </tbody>
 </table>

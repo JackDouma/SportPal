@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportPal.Data;
+using SportPal.Migrations;
 using SportPal.Models;
 
 namespace SportPal.Controllers
@@ -21,15 +22,18 @@ namespace SportPal.Controllers
 
         // GET: Standings
         // param called LeageName is required, or else user will be redirect to error page
-        public async Task<IActionResult> Index(string LeagueName)
+        public async Task<IActionResult> Index(int LeagueId)
         {
-            if (LeagueName == null)
+            if (LeagueId < 1)
             {
                 return RedirectToAction("Error");
             }
+
             // LeagueId is incorrect, but League is giving errors right now
-            var applicationDbContext = _context.League.Include(l => l.LeagueId);
-            ViewData["LeagueName"] = LeagueName;
+            var applicationDbContext = _context.League.Include(l => l.LeagueId == LeagueId);
+
+            ViewData["LeagueId"] = LeagueId;
+
             return View(await _context.Standings.ToListAsync());
         }
 
@@ -64,13 +68,17 @@ namespace SportPal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Standings standings)
+        public async Task<IActionResult> Create([Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Models.Standings standings)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(standings);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // i did this a lot here, learned it here https://stackoverflow.com/questions/1257482/redirecttoaction-with-parameter
+                return RedirectToAction(nameof(Index), new
+                {
+                    LeagueId = standings.LeagueId
+                });
             }
             ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name", standings.LeagueId);
             return View(standings);
@@ -98,7 +106,7 @@ namespace SportPal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Standings standings)
+        public async Task<IActionResult> Edit(int id, [Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Models.Standings standings)
         {
             if (id != standings.StandingsId)
             {
@@ -123,7 +131,10 @@ namespace SportPal.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new
+                {
+                    LeagueId = standings.LeagueId
+                }) ;
             }
             ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name", standings.LeagueId);
             return View(standings);
@@ -164,7 +175,10 @@ namespace SportPal.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new
+            {
+                LeagueId = standings.LeagueId
+            });
         }
 
         private bool StandingsExists(int id)
