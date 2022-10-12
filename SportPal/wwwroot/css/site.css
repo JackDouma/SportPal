@@ -16,3 +16,30 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* styles */
+body 
+{
+    background-color: #C5CAE9;
+}
+.navbar-dark {
+    background-color: #303F9F;
+}
+.nav-item > a {
+    color: #FFFFFF;
+}
+footer {
+    background-color: #303F9F;
+}
+footer > div > p 
+{
+    color: #FFFFFF;
+}
+
+.btn-primary {
+    background-color: #607D8B;
+}
+
+    .btn-primary:hover {
+        background-color: #51636b;
+    }
