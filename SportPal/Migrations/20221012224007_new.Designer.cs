@@ -3,21 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportPal.Data;
 
 #nullable disable
 
-namespace SportPal.Data.Migrations
+namespace SportPal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221012224007_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -247,23 +249,18 @@ namespace SportPal.Data.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int?>("StandingsId")
-                        .HasColumnType("int");
-
                     b.HasKey("LeagueId");
 
-                    b.HasIndex("StandingsId");
-
-                    b.ToTable("League");
+                    b.ToTable("Leagues");
                 });
 
-            modelBuilder.Entity("SportPal.Models.Standings", b =>
+            modelBuilder.Entity("SportPal.Models.Standing", b =>
                 {
-                    b.Property<int>("StandingsId")
+                    b.Property<int>("StandingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StandingsId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StandingId"), 1L, 1);
 
                     b.Property<string>("Coach")
                         .IsRequired()
@@ -287,9 +284,11 @@ namespace SportPal.Data.Migrations
                     b.Property<int>("Wins")
                         .HasColumnType("int");
 
-                    b.HasKey("StandingsId");
+                    b.HasKey("StandingId");
 
-                    b.ToTable("Standings");
+                    b.HasIndex("LeagueId");
+
+                    b.ToTable("Standing");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -343,18 +342,20 @@ namespace SportPal.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SportPal.Models.League", b =>
+            modelBuilder.Entity("SportPal.Models.Standing", b =>
                 {
-                    b.HasOne("SportPal.Models.Standings", "Standings")
-                        .WithMany("Leagues")
-                        .HasForeignKey("StandingsId");
+                    b.HasOne("SportPal.Models.League", "League")
+                        .WithMany("Standings")
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Standings");
+                    b.Navigation("League");
                 });
 
-            modelBuilder.Entity("SportPal.Models.Standings", b =>
+            modelBuilder.Entity("SportPal.Models.League", b =>
                 {
-                    b.Navigation("Leagues");
+                    b.Navigation("Standings");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@ namespace SportPal.Data
         {
         }
 
-        public DbSet<SportPal.Models.League> League { get; set; }
-        public DbSet<Standings> Standings { get; set; }
+        public DbSet<League> Leagues { get; set; }
+        public DbSet<SportPal.Models.Standing> Standing { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace SportPal.Models
 {
-    public class Standings
+    public class Standing
     {
         /**
          * create fields the standings table will have
@@ -10,7 +10,7 @@ namespace SportPal.Models
         // in the future this can also go much deeper. E.X -> players with a team FK -> player stats with a players fk and so on
 
         // id
-        public int StandingsId { get; set; }
+        public int StandingId { get; set; }
 
         // team
         [Required]
@@ -37,6 +37,7 @@ namespace SportPal.Models
         // points do not need a field, as it can be calculated with the record provided
 
         // forgien key
+        [Display(Name = "League")]
         public int LeagueId { get; set; }
 
         // parent ref

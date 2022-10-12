@@ -26,7 +26,7 @@ namespace SportPal.Models
         public string? Organizer { get; set; }
 
        // child ref
-        public List<Standings>? Standings { get; set; }
+        public List<Standing>? Standings { get; set; }
         
     }
 }

@@ -22,18 +22,18 @@ namespace SportPal.Controllers
         // GET: Leagues
         public async Task<IActionResult> Index()
         {
-              return View(await _context.League.ToListAsync());
+              return View(await _context.Leagues.ToListAsync());
         }
 
         // GET: Leagues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.League == null)
+            if (id == null || _context.Leagues == null)
             {
                 return NotFound();
             }
 
-            var league = await _context.League
+            var league = await _context.Leagues
                 .FirstOrDefaultAsync(m => m.LeagueId == id);
             if (league == null)
             {
@@ -68,12 +68,12 @@ namespace SportPal.Controllers
         // GET: Leagues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.League == null)
+            if (id == null || _context.Leagues == null)
             {
                 return NotFound();
             }
 
-            var league = await _context.League.FindAsync(id);
+            var league = await _context.Leagues.FindAsync(id);
             if (league == null)
             {
                 return NotFound();
@@ -119,12 +119,12 @@ namespace SportPal.Controllers
         // GET: Leagues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.League == null)
+            if (id == null || _context.Leagues == null)
             {
                 return NotFound();
             }
 
-            var league = await _context.League
+            var league = await _context.Leagues
                 .FirstOrDefaultAsync(m => m.LeagueId == id);
             if (league == null)
             {
@@ -139,14 +139,14 @@ namespace SportPal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.League == null)
+            if (_context.Leagues == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.League'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Leagues'  is null.");
             }
-            var league = await _context.League.FindAsync(id);
+            var league = await _context.Leagues.FindAsync(id);
             if (league != null)
             {
-                _context.League.Remove(league);
+                _context.Leagues.Remove(league);
             }
             
             await _context.SaveChangesAsync();
@@ -155,7 +155,7 @@ namespace SportPal.Controllers
 
         private bool LeagueExists(int id)
         {
-          return _context.League.Any(e => e.LeagueId == id);
+          return _context.Leagues.Any(e => e.LeagueId == id);
         }
     }
 }

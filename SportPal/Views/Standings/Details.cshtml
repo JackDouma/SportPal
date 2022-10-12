@@ -1,4 +1,4 @@
-﻿@model SportPal.Models.Standings
+﻿@model SportPal.Models.Standing
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Standings</h4>
+    <h4>Standing</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -49,6 +49,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.StandingsId">Edit</a> |
-    <a asp-action="Index" asp-route-LeagueId="@Model?.LeagueId">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.StandingId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

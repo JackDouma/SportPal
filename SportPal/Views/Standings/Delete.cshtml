@@ -1,4 +1,4 @@
-﻿@model SportPal.Models.Standings
+﻿@model SportPal.Models.Standing
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Standings</h4>
+    <h4>Standing</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -50,8 +50,8 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="StandingsId" />
+        <input type="hidden" asp-for="StandingId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" asp-route-LeagueId="@Model?.LeagueId">Back to List</a>
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

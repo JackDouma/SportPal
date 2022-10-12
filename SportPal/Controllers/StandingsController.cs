@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportPal.Data;
-using SportPal.Migrations;
 using SportPal.Models;
 
 namespace SportPal.Controllers
@@ -21,45 +20,35 @@ namespace SportPal.Controllers
         }
 
         // GET: Standings
-        // param called LeageName is required, or else user will be redirect to error page
-        public async Task<IActionResult> Index(int LeagueId)
+        public async Task<IActionResult> Index()
         {
-            if (LeagueId < 1)
-            {
-                return RedirectToAction("Error");
-            }
-
-            // LeagueId is incorrect, but League is giving errors right now
-            var applicationDbContext = _context.League.Include(l => l.LeagueId == LeagueId);
-
-            ViewData["LeagueId"] = LeagueId;
-
-            return View(await _context.Standings.ToListAsync());
+            var applicationDbContext = _context.Standing.Include(s => s.League);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Standings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Standings == null)
+            if (id == null || _context.Standing == null)
             {
                 return NotFound();
             }
 
-            var standings = await _context.Standings
-                .Include(l => l.League)
-                .FirstOrDefaultAsync(m => m.StandingsId == id);
-            if (standings == null)
+            var standing = await _context.Standing
+                .Include(s => s.League)
+                .FirstOrDefaultAsync(m => m.StandingId == id);
+            if (standing == null)
             {
                 return NotFound();
             }
 
-            return View(standings);
+            return View(standing);
         }
 
         // GET: Standings/Create
         public IActionResult Create()
         {
-            ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name");
+            ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name");
             return View();
         }
 
@@ -68,37 +57,33 @@ namespace SportPal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Models.Standings standings)
+        public async Task<IActionResult> Create([Bind("StandingId,Team,Coach,Wins,Losses,Ties,LeagueId")] Standing standing)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(standings);
+                _context.Add(standing);
                 await _context.SaveChangesAsync();
-                // i did this a lot here, learned it here https://stackoverflow.com/questions/1257482/redirecttoaction-with-parameter
-                return RedirectToAction(nameof(Index), new
-                {
-                    LeagueId = standings.LeagueId
-                });
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name", standings.LeagueId);
-            return View(standings);
+            ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
+            return View(standing);
         }
 
         // GET: Standings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Standings == null)
+            if (id == null || _context.Standing == null)
             {
                 return NotFound();
             }
 
-            var standings = await _context.Standings.FindAsync(id);
-            if (standings == null)
+            var standing = await _context.Standing.FindAsync(id);
+            if (standing == null)
             {
                 return NotFound();
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name", standings.LeagueId);
-            return View(standings);
+            ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
+            return View(standing);
         }
 
         // POST: Standings/Edit/5
@@ -106,9 +91,9 @@ namespace SportPal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StandingsId,Team,Coach,Wins,Losses,Ties,LeagueId")] Models.Standings standings)
+        public async Task<IActionResult> Edit(int id, [Bind("StandingId,Team,Coach,Wins,Losses,Ties,LeagueId")] Standing standing)
         {
-            if (id != standings.StandingsId)
+            if (id != standing.StandingId)
             {
                 return NotFound();
             }
@@ -117,12 +102,12 @@ namespace SportPal.Controllers
             {
                 try
                 {
-                    _context.Update(standings);
+                    _context.Update(standing);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StandingsExists(standings.StandingsId))
+                    if (!StandingExists(standing.StandingId))
                     {
                         return NotFound();
                     }
@@ -131,32 +116,29 @@ namespace SportPal.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index), new
-                {
-                    LeagueId = standings.LeagueId
-                }) ;
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "LeagueId", "Name", standings.LeagueId);
-            return View(standings);
+            ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
+            return View(standing);
         }
 
         // GET: Standings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Standings == null)
+            if (id == null || _context.Standing == null)
             {
                 return NotFound();
             }
 
-            var standings = await _context.Standings
-                .Include(l => l.League)
-                .FirstOrDefaultAsync(m => m.StandingsId == id);
-            if (standings == null)
+            var standing = await _context.Standing
+                .Include(s => s.League)
+                .FirstOrDefaultAsync(m => m.StandingId == id);
+            if (standing == null)
             {
                 return NotFound();
             }
 
-            return View(standings);
+            return View(standing);
         }
 
         // POST: Standings/Delete/5
@@ -164,26 +146,23 @@ namespace SportPal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Standings == null)
+            if (_context.Standing == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Standings'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Standing'  is null.");
             }
-            var standings = await _context.Standings.FindAsync(id);
-            if (standings != null)
+            var standing = await _context.Standing.FindAsync(id);
+            if (standing != null)
             {
-                _context.Standings.Remove(standings);
+                _context.Standing.Remove(standing);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new
-            {
-                LeagueId = standings.LeagueId
-            });
+            return RedirectToAction(nameof(Index));
         }
 
-        private bool StandingsExists(int id)
+        private bool StandingExists(int id)
         {
-            return _context.Standings.Any(e => e.StandingsId == id);
+          return _context.Standing.Any(e => e.StandingId == id);
         }
     }
 }
