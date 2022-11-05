@@ -23,7 +23,7 @@ namespace SportPal.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Standing.Include(s => s.League);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.OrderByDescending(s => s.Points).ToListAsync());
         }
 
         // GET: Standings/Details/5
@@ -61,6 +61,9 @@ namespace SportPal.Controllers
         {
             if (ModelState.IsValid)
             {
+                // set points based on wins and ties
+                standing.Points = (standing.Wins * 2) + (standing.Ties);
+
                 _context.Add(standing);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +94,7 @@ namespace SportPal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StandingId,Team,Coach,Wins,Losses,Ties,LeagueId")] Standing standing)
+        public async Task<IActionResult> Edit(int id, [Bind("StandingId,Team,Coach,Points,Wins,Losses,Ties,LeagueId")] Standing standing)
         {
             if (id != standing.StandingId)
             {
@@ -100,6 +103,9 @@ namespace SportPal.Controllers
 
             if (ModelState.IsValid)
             {
+                // set points based on wins and ties
+                standing.Points = (standing.Wins * 2) + (standing.Ties);
+
                 try
                 {
                     _context.Update(standing);

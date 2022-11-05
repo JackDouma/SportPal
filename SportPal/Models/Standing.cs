@@ -22,6 +22,9 @@ namespace SportPal.Models
         [MaxLength(25)]
         public string? Coach { get; set; }
 
+        // points
+        public int Points { get; set; }
+
         // wins
         [Range(0, 100, ErrorMessage = "Wins must be between 0-100")]
         public int Wins { get; set; }
@@ -33,8 +36,6 @@ namespace SportPal.Models
         // ties
         [Range(0, 100, ErrorMessage = "Ties must be between 0-100")]
         public int Ties { get; set; }
-
-        // points do not need a field, as it can be calculated with the record provided
 
         // forgien key
         [Display(Name = "League")]
