@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'sportpal'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C434B83E7F5B473B8B374E52C1D8F8E9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DA40416096BD46CFAD0393FA9F7C9D10 }}
           package: .
