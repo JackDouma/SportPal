@@ -1,14 +1,17 @@
 ﻿@model IEnumerable<SportPal.Models.League>
 
 @{
-    ViewData["Title"] = "League";
+    ViewData["Title"] = "League";  
 }
 
 <h1>League</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -37,9 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Organizer)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.LeagueId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LeagueId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LeagueId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.LeagueId">Details</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.LeagueId">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.LeagueId">Delete</a>
+                }          
             </td>
         </tr>
 }

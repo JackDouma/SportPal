@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SportPal.Models;
 
 namespace SportPal.Controllers
 {
+    [Authorize]
     public class StandingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,14 +20,14 @@ namespace SportPal.Controllers
         {
             _context = context;
         }
-
+        [AllowAnonymous]
         // GET: Standings
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Standing.Include(s => s.League);
             return View(await applicationDbContext.OrderByDescending(s => s.Points).ToListAsync());
         }
-
+        [AllowAnonymous]
         // GET: Standings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
