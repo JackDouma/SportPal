@@ -25,7 +25,7 @@ namespace SportPal.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Standing.Include(s => s.League);
-            return View(await applicationDbContext.OrderByDescending(s => s.Points).ToListAsync());
+            return View("Index", await applicationDbContext.OrderByDescending(s => s.Points).ToListAsync());
         }
         [AllowAnonymous]
         // GET: Standings/Details/5
@@ -33,7 +33,7 @@ namespace SportPal.Controllers
         {
             if (id == null || _context.Standing == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var standing = await _context.Standing
@@ -41,17 +41,17 @@ namespace SportPal.Controllers
                 .FirstOrDefaultAsync(m => m.StandingId == id);
             if (standing == null)
             {
-                return NotFound();
+                return View("404");
             }
 
-            return View(standing);
+            return View("Details", standing);
         }
 
         // GET: Standings/Create
         public IActionResult Create()
         {
             ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name");
-            return View();
+            return View("Create");
         }
 
         // POST: Standings/Create
@@ -68,10 +68,10 @@ namespace SportPal.Controllers
 
                 _context.Add(standing);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
-            return View(standing);
+            return View("Create", standing);
         }
 
         // GET: Standings/Edit/5
@@ -79,16 +79,16 @@ namespace SportPal.Controllers
         {
             if (id == null || _context.Standing == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var standing = await _context.Standing.FindAsync(id);
             if (standing == null)
             {
-                return NotFound();
+                return View("404");
             }
             ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
-            return View(standing);
+            return View("Edit", standing);
         }
 
         // POST: Standings/Edit/5
@@ -100,7 +100,7 @@ namespace SportPal.Controllers
         {
             if (id != standing.StandingId)
             {
-                return NotFound();
+                return View("404");
             }
 
             if (ModelState.IsValid)
@@ -117,17 +117,17 @@ namespace SportPal.Controllers
                 {
                     if (!StandingExists(standing.StandingId))
                     {
-                        return NotFound();
+                        return View("404");
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             ViewData["LeagueId"] = new SelectList(_context.Leagues, "LeagueId", "Name", standing.LeagueId);
-            return View(standing);
+            return View("Edit", standing);
         }
 
         // GET: Standings/Delete/5
@@ -135,7 +135,7 @@ namespace SportPal.Controllers
         {
             if (id == null || _context.Standing == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var standing = await _context.Standing
@@ -143,10 +143,10 @@ namespace SportPal.Controllers
                 .FirstOrDefaultAsync(m => m.StandingId == id);
             if (standing == null)
             {
-                return NotFound();
+                return View("404");
             }
 
-            return View(standing);
+            return View("Delete", standing);
         }
 
         // POST: Standings/Delete/5
@@ -165,7 +165,7 @@ namespace SportPal.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         private bool StandingExists(int id)
