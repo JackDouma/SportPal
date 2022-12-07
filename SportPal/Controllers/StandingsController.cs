@@ -156,7 +156,7 @@ namespace SportPal.Controllers
         {
             if (_context.Standing == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Standing'  is null.");
+                return View("404");
             }
             var standing = await _context.Standing.FindAsync(id);
             if (standing != null)

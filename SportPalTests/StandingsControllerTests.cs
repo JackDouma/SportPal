@@ -110,6 +110,8 @@ namespace SportPalTests
         [TestMethod]
         public void DetailsValidIdLoadsTeam()
         {
+            // arrange
+
             // act
             var result = (ViewResult)controller.Details(70).Result;
 
@@ -127,7 +129,34 @@ namespace SportPalTests
             // assert
             Assert.AreEqual("Create", result.ViewName);
         }
+        [TestMethod]
+        public void CreateValidLeagueLoadsLeague()
+        {
+            // arrange
+            var league = new League { LeagueId = 10, Name = "NHL", Sport = "Hockey", Organizer = "Gary" };
+            var team = new Standing { StandingId = 15, Team = "Team", Coach = "Mike", Points = 20, Wins = 9, Losses = 4, Ties = 2, League = league };
 
+            // act
+            controller.ModelState.AddModelError("", "No errors");
+            var result = (ViewResult)controller.Create(team).Result;
+
+            // assert
+            Assert.AreEqual(team, result.Model);
+        }
+        [TestMethod]
+        public void EditValidLeagueLoadsLeague()
+        {
+            // arrange
+            var league = new League { LeagueId = 10, Name = "NHL", Sport = "Hockey", Organizer = "Gary" };
+            var team = new Standing { StandingId = 15, Team = "Team", Coach = "Mike", Points = 20, Wins = 9, Losses = 4, Ties = 2, League = league };
+
+            // act
+            controller.ModelState.AddModelError("", "No errors");
+            var result = (ViewResult)controller.Edit(15, team).Result;
+
+            // assert
+            Assert.AreEqual(team, result.Model);
+        }
         #region "Edit"
         [TestMethod]
         public void EditNoIdLoads404()
@@ -237,6 +266,16 @@ namespace SportPalTests
             Assert.AreEqual(context.Standing.Find(70), result.Model);
         }
         #endregion
+        [TestMethod]
+        public void DeleteConfirmedDeleteErrorNoTeam()
+        {
+            // act
+            var result = (ViewResult)controller.DeleteConfirmed(40).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
         [TestMethod]
         public void DeleteConfirmedDeletesTeam()
         {
