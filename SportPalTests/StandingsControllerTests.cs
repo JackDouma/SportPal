@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SportPal.Controllers;
 using SportPal.Data;
@@ -73,7 +75,7 @@ namespace SportPalTests
         }
 
         [TestMethod]
-        public void DetailsNoProductsTableLoads404()
+        public void DetailsNoTeamsTableLoads404()
         {
             // arrange
             context.Standing = null;
@@ -106,7 +108,7 @@ namespace SportPalTests
         }
 
         [TestMethod]
-        public void DetailsValidIdLoadsProduct()
+        public void DetailsValidIdLoadsTeam()
         {
             // act
             var result = (ViewResult)controller.Details(70).Result;
@@ -115,5 +117,134 @@ namespace SportPalTests
             Assert.AreEqual(context.Standing.Find(70), result.Model);
         }
         #endregion
+        //controller.ModelState.AddModelError("put a descriptive key name here", 60);
+        [TestMethod]
+        public void CreateLoadsView()
+        {
+            // act
+            var result = (ViewResult)controller.Create();
+
+            // assert
+            Assert.AreEqual("Create", result.ViewName);
+        }
+
+        #region "Edit"
+        [TestMethod]
+        public void EditNoIdLoads404()
+        {
+            // act
+            var result = (ViewResult)controller.Edit(null).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditNoTeamsTableLoads404()
+        {
+            // arrange
+            context.Standing = null;
+
+            // act
+            var result = (ViewResult)controller.Edit(null).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditInvalidIdLoads404()
+        {
+            // act
+            var result = (ViewResult)controller.Edit(20).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditValidIdLoadsView()
+        {
+            // act
+            var result = (ViewResult)controller.Edit(70).Result;
+
+            // assert 
+            Assert.AreEqual("Edit", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditValidIdLoadsTeam()
+        {
+            // act
+            var result = (ViewResult)controller.Edit(70).Result;
+
+            // assert 
+            Assert.AreEqual(context.Standing.Find(70), result.Model);
+        }
+        #endregion
+
+        #region "Delete"
+        [TestMethod]
+        public void DeleteNoIdLoads404()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(null).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteNoTeamsTableLoads404()
+        {
+            // arrange
+            context.Standing = null;
+
+            // act
+            var result = (ViewResult)controller.Delete(null).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteInvalidIdLoads404()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(20).Result;
+
+            // assert 
+            Assert.AreEqual("404", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsView()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(70).Result;
+
+            // assert 
+            Assert.AreEqual("Delete", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsTeam()
+        {
+            // act
+            var result = (ViewResult)controller.Delete(70).Result;
+
+            // assert 
+            Assert.AreEqual(context.Standing.Find(70), result.Model);
+        }
+        #endregion
+        [TestMethod]
+        public void DeleteConfirmedDeletesTeam()
+        {
+            // act
+            var result = (ViewResult)controller.DeleteConfirmed(70).Result;
+
+            // assert 
+            Assert.AreEqual("Index", result.ViewName);
+        }
     }
 }
